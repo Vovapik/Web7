@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Tracking</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    p a {
+      color: #770ba3;
+      text-decoration: none;
+    }
+
+    p a:visited {
+      color: #770ba3;
+    }
+
+    body, html {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: " Harrington", Harrington;
+      background-image: url("background.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .photos img {
+      display: none;
+      max-width: 80%;
+      height: auto;
+    }
+    .photos img:nth-child(1):target,
+    .photos img:nth-child(2):target,
+    .photos img:nth-child(3):target,
+    .photos img:nth-child(4):target,
+    .photos img:nth-child(5):target {
+      display: flex;
+    }
+
+    .main-header-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .block{
+
+    }
+
+    .header {
+      height: auto;
+      background-color: transparent;
+      color: #770ba3;
+      padding: 20px;
+      flex-shrink: 0;
+      justify-content: space-between;
+      text-align: center;
+      position: relative;
+      border: 2px solid #333;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .header-box {
+      background-color: #020c33;
+      color: #770ba3;
+      padding: 5px 10px;
+      position: absolute;
+      width: fit-content;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 10px;
+      border: 2px solid #333;
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      position: relative;
+      height: 100%;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .collapse {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f8f9fa;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .collapse.show {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .left-block {
+      background-color: transparent;
+      font-size: x-large;
+      color: #770ba3;
+      width: auto;
+      padding: 20px;
+      flex-shrink: 0;
+      height: auto;
+      position: relative;
+      top: 0;
+      border: 2px solid #333;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .center-right-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .center-right-footer-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .center-content {
+      display: flex;
+      flex: 1;
+    }
+
+    .center-block {
+      background-color: transparent;
+      font-size: x-large;
+      color: #770ba3;
+      flex: 1;
+      padding: 20px;
+      border: 2px solid #333;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin-top: 5px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+
+    .right-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .right-block {
+      background-color: transparent;
+      width: auto;
+      font-size: x-large;
+      color: #770ba3;
+      padding: 20px;
+      border: 2px solid #333;
+      flex: 1;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .right-block2 {
+      background-color: transparent;
+      width: auto;
+      font-size: x-large;
+      color: #770ba3;
+      padding: 20px;
+      border: 2px solid #333;
+      flex: 1;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .footer {
+      height: auto;
+      background-color: transparent;
+      color: #770ba3;
+      padding: 20px;
+      flex-shrink: 0;
+      justify-content: space-between;
+      text-align: center;
+      position: relative;
+      border: 2px solid #333;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+
+    .footer-box {
+      background-color: #020c33;
+      flex-direction: column;
+      color: #770ba3;
+      padding: 5px 10px;
+      width: fit-content;
+      left: 10px;
+      border: 2px solid #333;
+      position: absolute;
+      top: 0;
+    }
+    .footer, .footer-box {
+      box-sizing: border-box;
+    }
+    /* Work area */
+    #work {
+      position: fixed;
+      width: 80%;
+      height: 80%;
+      left: 10%;
+      top: 10%;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 2px dashed black;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Anim area */
+    #anim {
+      position: relative;
+      width: calc(100% - 10px);
+      height: calc(100% - 50px);
+      border: 5px solid red;
+      margin: auto;
+    }
+
+    /* Controls */
+    #controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .circle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    .red {
+      background-color: red;
+    }
+
+    .green {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+<div class="main-header-container">
+  <div class="header">
+    <h1>Header</h1>
+    <div class="header-box">
+      <h1>Tarot</h1>
+    </div>
+  </div>
+  <div class="main-container">
+    <div class="left-block">
+      <div id="logTable" >
+      </div>
+    </div>
+    <div class="center-right-footer-container">
+      <div class="center-right-container">
+        <div class="center-content">
+          <div class="center-block">
+            <button id="play">Play</button>
+            <div id="work">
+              <div id="controls">
+                <div id="messages">Here will be messages</div>
+                <button id="start" style="display: none;">Start</button>
+                <button id="stop" style="display: none;">Stop</button>
+                <button id="reload" style="display: none;">Reload</button>
+                <button id="close">Close</button>
+              </div>
+              <div id="anim"></div>
+            </div>
+
+          </div>
+
+          <div class="right-container">
+            <div class="right-block"><p>Right block1</p></div>
+            <div class="right-block"><p>Right block2</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <h1>Footer</h1>
+        <div class="footer-box">
+          <h1>Tarot</h1>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  const playButton = document.getElementById('play');
+  const workArea = document.getElementById('work');
+  const closeButton = document.getElementById('close');
+  const animArea = document.getElementById('anim');
+  const startButton = document.getElementById('start');
+  const stopButton = document.getElementById('stop');
+  const reloadButton = document.getElementById('reload');
+  const logTable = document.getElementById('logTable');
+  const messagesDiv = document.getElementById('messages');
+
+  let redCircle, greenCircle;
+  let animationId;
+  let redDirX = 1, redDirY = 1;
+  let greenDirX = 1, greenDirY = 1;
+  let eventCounter = 0;
+  let accumulatedEvents = [];
+
+  logTable.style.display = 'none';
+
+  const createCircle = (color, left, top) => {
+    const circle = document.createElement('div');
+    circle.classList.add('circle', color);
+    circle.style.left = left + 'px';
+    circle.style.top = top + 'px';
+    animArea.appendChild(circle);
+    return circle;
+  };
+
+  const showMessage = (message) => {
+    messagesDiv.textContent = message;
+  };
+
+  const accumulateEvent = (event) => {
+    accumulatedEvents.push(event);
+    localStorage.setItem('accumulatedEvents', JSON.stringify(accumulatedEvents));
+  };
+
+  const sendAccumulatedDataToServer = () => {
+    if (accumulatedEvents.length === 0) return;
+
+    fetch('https://your-server-endpoint/accumulated', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(accumulatedEvents),
+    })
+            .then((response) => response.json())
+            .then((result) => {
+              console.log('Accumulated data sent:', result);
+              accumulatedEvents = [];
+              localStorage.removeItem('accumulatedEvents');
+              logEvent('Accumulated data sent to server', true);
+            })
+            .catch((error) => {
+              console.error('Error sending accumulated data:', error);
+              logEvent('Failed to send accumulated data to server', true);
+            });
+  };
+
+  const sendToServer = (data) => {
+    fetch('https://your-server-endpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+            .then((response) => response.json())
+            .then((result) => {
+              console.log('Data saved to server:', result);
+              logEvent('Data sent to server', true);
+            })
+            .catch((error) => {
+              console.error('Error saving data to server:', error);
+              logEvent('Failed to send data to server', true);
+            });
+  };
+
+  const logEvent = (message, isServer = false) => {
+    const timestamp = new Date().toISOString();
+    const localTime = new Date().toLocaleString();
+    const event = { id: ++eventCounter, timestamp, localTime, message, source: isServer ? 'Server' : 'Local' };
+
+    showMessage(message);
+
+    const logRow = `<tr><td>${event.id}</td><td>${event.localTime}</td><td>${event.message}</td><td>${event.source}</td></tr>`;
+    if (!logTable.querySelector('table')) {
+      logTable.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${logRow}
+            </tbody>
+          </table>
+        `;
+    } else {
+      logTable.querySelector('tbody').innerHTML += logRow;
+    }
+
+    accumulateEvent(event);
+
+    if (!isServer) sendToServer(event);
+  };
+
+  const startAnimation = () => {
+    const animRect = animArea.getBoundingClientRect();
+
+    const moveCircle = (circle, dirX, dirY) => {
+      const circleRect = circle.getBoundingClientRect();
+
+      if (circleRect.right >= animRect.right || circleRect.left <= animRect.left) dirX *= -1;
+      if (circleRect.bottom >= animRect.bottom || circleRect.top <= animRect.top) dirY *= -1;
+
+      circle.style.left = circle.offsetLeft + dirX + 'px';
+      circle.style.top = circle.offsetTop + dirY + 'px';
+
+      return [dirX, dirY];
+    };
+
+    animationId = setInterval(() => {
+      [redDirX, redDirY] = moveCircle(redCircle, redDirX, redDirY);
+      [greenDirX, greenDirY] = moveCircle(greenCircle, greenDirX, greenDirY);
+
+      logEvent('Circles moved');
+
+      const redRect = redCircle.getBoundingClientRect();
+      const greenRect = greenCircle.getBoundingClientRect();
+
+      if (
+              redRect.left < greenRect.right &&
+              redRect.right > greenRect.left &&
+              redRect.top < greenRect.bottom &&
+              redRect.bottom > greenRect.top
+      ) {
+        clearInterval(animationId);
+        logEvent('Circles collided!');
+        stopButton.style.display = 'none';
+        reloadButton.style.display = 'inline';
+      }
+    }, 10);
+  };
+
+  playButton.addEventListener('click', () => {
+    workArea.style.display = 'flex';
+    logTable.style.display = 'none';
+    const animWidth = animArea.clientWidth;
+    const animHeight = animArea.clientHeight;
+
+    redCircle = createCircle('red', 0, Math.random() * (animHeight - 20));
+    greenCircle = createCircle('green', Math.random() * (animWidth - 20), 0);
+
+    logEvent('Play button clicked');
+    sendToServer({ event: 'Play button clicked', timestamp: new Date().toISOString() });
+
+    startButton.style.display = 'inline';
+    stopButton.style.display = 'none';
+    reloadButton.style.display = 'none';
+  });
+
+  closeButton.addEventListener('click', () => {
+    workArea.style.display = 'none';
+    animArea.innerHTML = '';
+    clearInterval(animationId);
+    logTable.style.display = 'block';
+    logEvent('Close button clicked');
+
+    sendAccumulatedDataToServer();
+  });
+
+  startButton.addEventListener('click', () => {
+    startAnimation();
+    startButton.style.display = 'none';
+    stopButton.style.display = 'inline';
+    logEvent('Start button clicked');
+  });
+
+  stopButton.addEventListener('click', () => {
+    clearInterval(animationId);
+    stopButton.style.display = 'none';
+    startButton.style.display = 'inline';
+    logEvent('Stop button clicked');
+  });
+
+  reloadButton.addEventListener('click', () => {
+    animArea.innerHTML = '';
+    const animWidth = animArea.clientWidth;
+    const animHeight = animArea.clientHeight;
+
+    redCircle = createCircle('red', 0, Math.random() * (animHeight - 20));
+    greenCircle = createCircle('green', Math.random() * (animWidth - 20), 0);
+
+    reloadButton.style.display = 'none';
+    startButton.style.display = 'inline';
+    redDirX = 1; redDirY = 1;
+    greenDirX = 1; greenDirY = 1;
+    logEvent('Reload button clicked');
+  });
+
+</script>
+</body>
+</html>
