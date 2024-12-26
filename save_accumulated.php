@@ -1,4 +1,5 @@
 // save_accumulated.php - Save accumulated events to the database
+require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
