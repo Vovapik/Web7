@@ -13,7 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Include the database connection
 require_once 'db.php';
-
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['message' => 'Database connection failed: ' . $e->getMessage()]);
+    exit();
+}
 // Handle POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Read the input data
