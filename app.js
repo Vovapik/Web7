@@ -67,21 +67,25 @@ const accumulateEventLocally = (event) => {
 
 const sendAccumulatedEvents = async () => {
   const events = JSON.parse(localStorage.getItem('accumulatedEvents')) || [];
-
   if (events.length > 0) {
     try {
-      await fetch('save_accumulated_events.php', {
+      const response = await fetch('save_accumulated.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(events),
       });
-
-      localStorage.removeItem('accumulatedEvents');
+      const result = await response.json();
+      if (result.success) {
+        localStorage.removeItem('accumulatedEvents');
+      } else {
+        console.error('Error saving accumulated events:', result.error);
+      }
     } catch (error) {
       console.error('Error sending accumulated events:', error);
     }
   }
 };
+
 
 const updateLogTable = (event) => {
   const logRow = `<tr><td>${event.id}</td><td>${event.localTime}</td><td>${event.message}</td><td>${event.method}</td></tr>`;
