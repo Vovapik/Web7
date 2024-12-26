@@ -48,15 +48,20 @@ const logEvent = async (message, method = 'immediate') => {
 };
 
 const sendEventToServer = async (event) => {
-  try {
-    await fetch('save_event.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(event),
-    });
-  } catch (error) {
-    console.error('Error sending event to server:', error);
-  }
+    try {
+        const response = await fetch('save_event.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(event),
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
+        console.log('Event saved successfully:', result);
+    } catch (error) {
+        console.error('Error sending event to server:', error);
+    }
 };
 
 const accumulateEventLocally = (event) => {
