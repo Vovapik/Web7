@@ -1,5 +1,5 @@
 // save_event.php - Save immediate event to the database
-
+require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Process the incoming POST data
     $input = file_get_contents('php://input');
