@@ -1,4 +1,5 @@
 // fetch_events.php - Fetch events from the database
+require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $stmt = $pdo->query("SELECT * FROM events ORDER BY event_id ASC");
