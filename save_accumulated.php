@@ -1,3 +1,4 @@
+<?php
 // save_accumulated.php - Save accumulated events to the database
 require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,3 +32,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'error' => 'Invalid input data']);
     }
 }
+?>
