@@ -49,14 +49,18 @@ const logEvent = async (message, method = 'immediate') => {
 
 const sendEventToServer = async (event) => {
     try {
-        const response = await fetch('save_event.php', {
+        const response = await fetch('https://web7-production.up.railway.app/save_event.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(event),
         });
+
+        // Check if the response is OK (status code 200-299)
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Network response was not ok: ${response.statusText}`);
         }
+
+        // Parse the JSON response
         const result = await response.json();
         console.log('Event saved successfully:', result);
     } catch (error) {
