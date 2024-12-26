@@ -1,3 +1,4 @@
+<?php
 // fetch_events.php - Fetch events from the database
 require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -9,3 +10,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);
     }
 }
+?>
